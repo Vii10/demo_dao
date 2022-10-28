@@ -1,0 +1,14 @@
+package application;
+
+import model.entities.Department;
+
+public class Program {
+
+	public static void main(String[] args) {
+		
+		//Test
+		Department dp = new Department(1, "seller");
+		System.out.println(dp);
+	}
+
+}
