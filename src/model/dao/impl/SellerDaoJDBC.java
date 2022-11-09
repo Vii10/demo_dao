@@ -66,21 +66,11 @@ public class SellerDaoJDBC implements SellerDao {
 				//Se não retornar nenhum registro,
 				//Essa condição será pulada
 				
-				//Objeto necessario para a POO conforme UML
-				Department dep = new Department();
-				//Atribuindo valores através do acesso ao ResultSet
-				dep.setId(rs.getInt("DepartmentId"));
-				dep.setName(rs.getString("DepName"));
+				//Chamando função para instanciar o departamento
+				Department dep = Department(rs);
 				
-				//Objeto necessario para a POO conforme UML
-				Seller seller = new Seller();
-				//Atribuindo valores atraves do acesso ao ResultSet
-				seller.setId(rs.getInt("Id"));
-				seller.setName(rs.getString("Name"));
-				seller.setEmail(rs.getString("Email"));
-				seller.setBaseSalary(rs.getDouble("BaseSalary"));
-				seller.setBirthDate(rs.getDate("BirthDate"));
-				seller.setDepartment(dep);
+				//Chamando funão para instanciar o vendedor
+				Seller seller = Seller(rs, dep);
 				
 				//Retorna um vendedor por id
 				return seller;
@@ -96,6 +86,24 @@ public class SellerDaoJDBC implements SellerDao {
 			DB.closeStatement(ps);
 			DB.closeResultSet(rs);
 		}
+	}
+
+	private Seller Seller(ResultSet rs, model.entities.Department dep) throws SQLException {
+		Seller seller = new Seller();
+		seller.setId(rs.getInt("Id"));
+		seller.setName(rs.getString("Name"));
+		seller.setEmail(rs.getString("Email"));
+		seller.setBaseSalary(rs.getDouble("BaseSalary"));
+		seller.setBirthDate(rs.getDate("BirthDate"));
+		seller.setDepartment(dep);
+		return seller;
+	}
+
+	private Department Department(ResultSet rs) throws SQLException {
+		Department dep = new Department();
+		dep.setId(rs.getInt("DepartmentId"));
+		dep.setName(rs.getString("DepName"));
+		return dep;
 	}
 
 	@Override
