@@ -1,5 +1,6 @@
 package application;
 
+import java.util.Date;
 import java.util.List;
 
 import model.dao.DaoFactory;
@@ -13,7 +14,6 @@ public class Program {
 		
 		SellerDao sellerDao = DaoFactory.createSellerDao();
 		
-		//Testando findById
 		System.out.println("=== TEST 1: seller findById ===");
 		Seller seller = sellerDao.findById(3);
 		System.out.println(seller);
@@ -30,6 +30,12 @@ public class Program {
 		for(Seller s : list) {
 			System.out.println(s);
 		}
+		
+		System.out.println("\n=== TEST 4: seller insert ===");
+		Seller newSeller = new Seller(null, "CJ", "agaragã@gmail.com", new Date(), 2000.00, department);
+		//Inserir no banco de dados através do SellerDao
+		sellerDao.insert(newSeller);
+		System.out.println("OK! ID = " + newSeller.getId());
 	}
 
 }

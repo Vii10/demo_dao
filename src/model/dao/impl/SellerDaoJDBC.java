@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,8 +29,50 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public void insert(Seller department) {
-		// TODO Auto-generated method stub
-
+		//Iniciando PS
+		PreparedStatement st = null;
+		
+		try {
+			//Iniciando st
+			st = conn.prepareStatement(
+					"INSERT INTO seller "
+					+ "(Name, Email, BirthDate, BaseSalary, DepartmentId) "
+					+ "VALUES "
+					+ "(?, ?, ?, ?, ?)",
+					Statement.RETURN_GENERATED_KEYS);
+			
+			//Configurando cada interrogação conforme os dados
+			st.setString(1, department.getName());
+			st.setString(2, department.getEmail());
+			st.setDate(3, new java.sql.Date(department.getBirthDate().getTime()));
+			st.setDouble(4, department.getBaseSalary());
+			st.setInt(5, department.getDepartment().getId());
+			
+			//Variavel para verificação
+			int rowsAff = st.executeUpdate();
+			
+			if(rowsAff > 0) {
+				ResultSet rs = st.getGeneratedKeys();
+				//Checando se o valor existe
+				if(rs.next()) {
+					int id = rs.getInt(1); //Precisa ser 1, pois sera a primeira coluna das chaves recuperadas
+					//Populando o objeto com um novo id
+					department.setId(id);
+				}
+				//Fechando resultset aberto no if anterior
+				DB.closeResultSet(rs);;
+			}
+				//Verificando também se nenhuma linha foi alterada
+				else {
+					throw new DbException("Error! No rows affected!");
+				}
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+		}
 	}
 
 	@Override
