@@ -111,8 +111,55 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public List<Seller> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try{
+			//Iniciando o preparedstatement
+			ps = conn.prepareStatement(
+					//Pesquisando de forma geral os vendedores
+					"SELECT seller.*, department.Name as DepName "
+					+ "FROM seller INNER JOIN department "
+					+ "ON seller.DepartmentId = department.Id "
+					+ "ORDER BY Name");
+
+			//Executando Query e guardando execução em uma ResultSet
+			//Pode-se converter resultset em set
+			rs = ps.executeQuery();
+			
+			//A assinatura do método retorna uma lista
+			List<Seller> list = new ArrayList<>();
+			
+			//Configurando a não repetição de departamentos com o map
+			Map<Integer, Department> map = new HashMap<>();
+			
+			//Precisa ser while, pois esse metodo percorre até o último encontrado
+			while(rs.next()) {
+				
+				//Usando Map para testar se o departamento tem um ID definido
+				//Passa-se como valor chave a função getInt do ResultSet da coluna do Departamento
+				Department dep = map.get(rs.getInt("DepartmentId"));
+				
+				if(dep == null) {
+					//Intanciando um departamento se a variavel dep for nula
+					dep = Department(rs);
+					//Salvando departamento no dep
+					map.put(rs.getInt("DepartmentId"), dep);
+				}
+				//Chamando função para instanciar o vendedor
+				Seller seller = Seller(rs, dep);
+				//Adicionar o vendedor na lista
+				list.add(seller);
+			}
+			return list;
+		}
+		catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(ps);
+			DB.closeResultSet(rs);
+		}
 	}
 
 	@Override
