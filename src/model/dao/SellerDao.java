@@ -2,6 +2,7 @@ package model.dao;
 
 import java.util.List;
 
+import model.entities.Department;
 import model.entities.Seller;
 
 public interface SellerDao {
@@ -23,4 +24,6 @@ public interface SellerDao {
 	/*
 	 * Retornará uma lista de vendedores sem a necessidade de passar um parâmetro
 	 */
+	//Retorna um vendedor por departamento
+	List<Seller> findByDepartment(Department department);
 }
