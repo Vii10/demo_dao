@@ -37,15 +37,11 @@ public class Program {
 		sellerDao.insert(newSeller);
 		System.out.println("OK! ID = " + newSeller.getId());
 		
-		System.out.println("\n=== TEST 5: seller update ===");
-		//Procurando vendedor pelo id
+		System.out.println("\n=== TEST 5: seller update =====");
 		seller = sellerDao.findById(1);
-		//Mudando nome do vendedor
-		seller.setName("Negão do Borel");
-		//Inserindo novo nome do banco
+		seller.setName("Martha Waine");
 		sellerDao.update(seller);
-		//Finalizando alteração
-		System.out.println("Completed!");
+		System.out.println("Update completed");
 	}
 
 }
