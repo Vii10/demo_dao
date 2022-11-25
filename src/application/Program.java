@@ -36,6 +36,16 @@ public class Program {
 		//Inserir no banco de dados através do SellerDao
 		sellerDao.insert(newSeller);
 		System.out.println("OK! ID = " + newSeller.getId());
+		
+		System.out.println("\n=== TEST 5: seller update ===");
+		//Procurando vendedor pelo id
+		seller = sellerDao.findById(1);
+		//Mudando nome do vendedor
+		seller.setName("Negão do Borel");
+		//Inserindo novo nome do banco
+		sellerDao.update(seller);
+		//Finalizando alteração
+		System.out.println("Completed!");
 	}
 
 }
